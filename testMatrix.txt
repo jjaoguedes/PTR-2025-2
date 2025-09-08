@@ -1,0 +1,95 @@
+// src/main.c
+// Arquivo de teste para a ADT Matrix
+
+// Importa cabeçalho da biblioteca Matrix
+#include "matrix.h"
+#include <stdio.h>
+#include <math.h>
+
+// Função auxiliar para verificar resultado esperado de double
+void check_double(const char *msg, double got, double expected, double eps) {
+    if (fabs(got - expected) < eps) {
+        printf("[OK]   %s: obtido=%.6f, esperado=%.6f\n", msg, got, expected);
+    } else {
+        printf("[FAIL] %s: obtido=%.6f, esperado=%.6f\n", msg, got, expected);
+    }
+}
+
+// Função auxiliar para verificar igualdade entre matrizes
+void check_matrix(const char *msg, const Matrix *A, const Matrix *B, double eps) {
+    if (mat_equals(A, B, eps)) {
+        printf("[OK]   %s\n", msg);
+    } else {
+        printf("[FAIL] %s\n", msg);
+        if (A) mat_print(A, "Obtido");
+        if (B) mat_print(B, "Esperado");
+    }
+}
+
+int main(void) {
+    MatrixStatus st;
+
+    printf("=== Teste da ADT Matrix ===\n\n");
+
+    // 1. Criação de matriz identidade
+    Matrix *I = mat_identity(3);
+    mat_print(I, "Matriz identidade 3x3");
+
+    // Matriz identidade esperada
+    double arrI[9] = {
+        1,0,0,
+        0,1,0,
+        0,0,1
+    };
+    Matrix *Iexp = mat_from_array(3,3, arrI);
+    check_matrix("Identidade 3x3", I, Iexp, 1e-9);
+
+    // 2. Teste de soma de matrizes
+    double arrA[4] = {1,2,3,4};
+    double arrB[4] = {5,6,7,8};
+    Matrix *A = mat_from_array(2,2, arrA);
+    Matrix *B = mat_from_array(2,2, arrB);
+    Matrix *C = mat_add(A,B,&st);
+    mat_print(C, "A+B");
+
+    double arrCexp[4] = {6,8,10,12};
+    Matrix *Cexp = mat_from_array(2,2, arrCexp);
+    check_matrix("Soma A+B", C, Cexp, 1e-9);
+
+    // 3. Teste de multiplicação
+    Matrix *M = mat_mul(A,B,&st);
+    mat_print(M, "A*B");
+
+    // 4. Teste determinante
+    double arrD[9] = {
+        1,2,3,
+        0,1,4,
+        5,6,0
+    };
+    Matrix *D = mat_from_array(3,3,arrD);
+    double det = mat_determinant(D,&st);
+    check_double("Determinante D", det, 1.0, 1e-9);
+
+    // 5. Teste inversa
+    Matrix *Dinv = mat_inverse(D,&st);
+    mat_print(Dinv, "Inversa de D");
+
+    // 6. Transposta
+    Matrix *At = mat_transpose(A,&st);
+    mat_print(At, "A transposta");
+
+    // Libera memória
+    mat_free(&I);
+    mat_free(&Iexp);
+    mat_free(&A);
+    mat_free(&B);
+    mat_free(&C);
+    mat_free(&Cexp);
+    mat_free(&M);
+    mat_free(&D);
+    mat_free(&Dinv);
+    mat_free(&At);
+
+    printf("\n=== Fim dos testes ===\n");
+    return 0;
+}
