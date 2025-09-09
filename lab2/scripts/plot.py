@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Lê o arquivo
-df = pd.read_csv("sim_out.tsv", sep="\t")
+df = pd.read_csv("out/sim_out.tsv", sep="\t")
 
 # Gráfico yx(t) e yy(t)
 plt.figure()

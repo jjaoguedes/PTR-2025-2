@@ -1,8 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
-SEM = "periods_sem_carga.csv"
-COM = "periods_com_carga.csv"
+SEM = "out/periods_sem_carga.csv"
+COM = "out/periods_com_carga.csv"
 
 def load_and_clean(path):
     df = pd.read_csv(path)
@@ -68,8 +68,8 @@ def main():
     print(md_text)
 
     # Salva Markdown e CSV
-    Path("tabela_periodos_jitter.md").write_text(md_text, encoding="utf-8")
-    tabela.to_csv("tabela_periodos_jitter.csv", index=True, encoding="utf-8")
+    Path("out/tabela_periodos_jitter.md").write_text(md_text, encoding="utf-8")
+    tabela.to_csv("out/tabela_periodos_jitter.csv", index=True, encoding="utf-8")
 
     print("\nArquivos gerados:")
     print(" - tabela_periodos_jitter.md")
